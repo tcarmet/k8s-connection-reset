@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-nginx
+data:
+  default.conf: |
+    server {
+      listen 80 default_server;
+      listen [::]:80 default_server;
+      error_log  /var/log/nginx/error.log debug;
+      server_name localhost;
+
+      location / {
+        root /data;
+      }
+    }

@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  labels:
+    app: client
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+      - name: client-connection-reset
+        image: byrnedo/alpine-curl:0.1.7
+        imagePullPolicy: "IfNotPresent"
+        command: ['/bin/sh', '-c']
+        args: ['/client.sh http://nginx/small-file.txt']
+        volumeMounts:
+          - name: workspace
+            mountPath: /tmp
+          - name: client-script
+            mountPath: /client.sh
+            subPath: client.sh
+      volumes:
+      - name: workspace
+        emptyDir:
+      - name: client-script
+        configMap:
+          name: client-script
+          defaultMode: 0755

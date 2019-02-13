@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      initContainers:
+        - name: create-content
+          image: alpine
+          command: ['/bin/sh', '-c']
+          args: ['dd if=/dev/urandom of=/data/small-file.txt bs=1M count=4']
+          volumeMounts:
+            - name: workspace
+              mountPath: /data
+      containers:
+      - name: nginx
+        image: nginx:1.15.1-alpine
+        imagePullPolicy: "IfNotPresent"
+        ports:
+        - name: http
+          containerPort: 80
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1Gi
+          requests:
+            cpu: "1"
+            memory: 1Gi
+        volumeMounts:
+          - name: workspace
+            mountPath: /data
+          - name: config-nginx
+            mountPath: /etc/nginx/conf.d/
+      volumes:
+      - name: workspace
+        emptyDir:
+      - name: config-nginx
+        configMap:
+          name: config-nginx
