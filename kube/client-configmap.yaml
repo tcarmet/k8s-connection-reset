@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: client-script
+data:
+  client.sh: |
+    #!/bin/sh
+
+    # $1 file url
+
+    # waiting for the server to be available
+    sleep 10
+
+    while true; do
+      curl -o file.txt $1
+    done
