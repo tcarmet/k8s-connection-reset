@@ -55,3 +55,9 @@ event as it might be something else.
 
 If the clients seem stuck feel free to restart the pods like the following
 `kubectl delete pod -l app=client`
+
+## Links
+
+Relates to:
+* [docker/libnetwork#1090](https://github.com/docker/libnetwork/issues/1090)
+* [kubernetes/kubernetes#74839](https://github.com/kubernetes/kubernetes/issues/74839)
